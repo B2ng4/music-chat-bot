@@ -4,11 +4,11 @@ from aiogram.types import Message,FSInputFile
 from aiogram.filters import Command
 
 from keyboards.main import keyboard_main
-from module import generateVocal
-from models.model import Form
-from models.generateImage.kandinskiy import Text2ImageAPI
+from modules.generateVocal import generateVocal
+from models.ModelForm import Form
+from models.ModelText2ImageAPI import Text2ImageAPI
 
-import base64
+from modules.generateImage import generateImage
 import os
 
 router = Router()
@@ -34,27 +34,12 @@ async def generate(msg: Message, state: FSMContext):
 async def request_text(msg: Message):
     await msg.answer("⚙️⚙️⚙️*Погодите*...*Я творю*...⚙️⚙️️⚙️", parse_mode="Markdown")
 
-    api = Text2ImageAPI('https://api-key.fusionbrain.ai/', api_key = os.getenv("api_key"), secret_key = os.getenv("secret_key"))
-    model_id = api.get_model()
-    uuid = api.generate("Cоздай обложку для песни, её первые слова:", model_id)
-    images = api.check_generation(uuid)
-    print("Image successfully generated")
-
-    if images:
-        directory = 'models/generateImage/images'
-
-        for idx, img_base64 in enumerate(images):
-            file_number = idx + 1
-            file_path = os.path.join(directory, f"image_from_{msg.from_user.username}_#{file_number}.jpg")
-
-            while os.path.exists(file_path):
-                file_number += 1
-                file_path = os.path.join(directory, f"image_from_{msg.from_user.username}_#{file_number}.jpg")
-
-            with open(file_path, "wb") as file:
-                file.write(base64.b64decode(img_base64))
-
-                photo = FSInputFile(file_path)
-                await msg.answer_photo(photo=photo, caption="Вот ваша обложка")
-    else:
-        await msg.answer("Упс. Не получилось")
+    api_kandinsky = Text2ImageAPI('https://api-key.fusionbrain.ai/',
+                                  api_key=os.getenv("api_key"),
+                                  secret_key=os.getenv("secret_key"))
+    model_id = api_kandinsky.get_model()
+    prompt = api_kandinsky.generate("Cоздай обложку для песни, её первые слова:", model_id)
+    generated_images = api_kandinsky.check_generation(prompt)
+    photos = await generateImage(generated_images, msg.from_user.username)
+    if photos:
+        await msg.answer_photo(photo=photos[0], caption="Вот ваша обложка")

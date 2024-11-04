@@ -1,6 +1,5 @@
 import json
 import time
-import os
 import requests
 
 
@@ -55,7 +54,6 @@ class Text2ImageAPI:
                 time.sleep(delay)
 
         def download_image(self, url, file_path):
-
             response = requests.get(url, stream=True)
             if response.status_code == 200:
                 with open(file_path, 'wb') as file:
