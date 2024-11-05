@@ -1,6 +1,8 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from API.models.vocal_generate import vocal_get
 from models.text_generate import music_text_generate
 from  FastAPImodels import *
 from starlette.requests import Request
@@ -28,8 +30,12 @@ async def home():
    return {"response": "API для взаимодействия с AI моделями"}
 
 
-@app.post("/api/v1/get_music_text", )
+@app.post("/api/v1/get_music_text" )
 async def music_text(prompt:Prompt):
     all_music_text = await music_text_generate(prompt)
     return {"music_text": all_music_text}
 
+
+@app.post("/api/v1/get_vocal")
+async def vocal(musictext:MusText):
+    wav_vocal = vocal_get_wav(musictext)
