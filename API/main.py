@@ -32,7 +32,7 @@ async def home():
 
 @app.post("/api/v1/get_music_text" )
 async def music_text(prompt:Prompt):
-    all_music_text = await music_text_generate(prompt)
+    all_music_text = await music_text_generate(prompt.json())
     return {"music_text": all_music_text}
 
 
