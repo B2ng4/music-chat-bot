@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from API.models.vocal_generate import vocal_get
+from models.vocal_generate import vocal_get_wav
 from models.text_generate import music_text_generate
 from  FastAPImodels import *
 from starlette.requests import Request
