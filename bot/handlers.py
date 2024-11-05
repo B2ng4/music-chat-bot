@@ -9,6 +9,7 @@ from models.ModelForm import Form
 from models.ModelText2ImageAPI import Text2ImageAPI
 
 from modules.generateImage import generateImage
+from apiRequests.generateText import generateText
 import os
 
 router = Router()
@@ -29,6 +30,16 @@ async def generate(msg: Message, state: FSMContext):
     await msg.answer("⚙️⚙️⚙️*Погодите*...*Я сочиняю*...⚙️⚙️️⚙️",parse_mode="Markdown")
     await msg.answer_voice(voice=FSInputFile(voice_file),caption="Сгенерированный вокал")
     await state.clear()
+
+@router.message(lambda message: message.text == "Генерация с нуля🎹")
+async def request_text(msg: Message):
+    await msg.answer("Напишите, о чем должен быть текст?", parse_mode="Markdown")
+    @router.message()
+    async def receive_text(msg: Message):
+        text = msg.text
+        genText = f'{generateText(text)}'
+        await msg.answer(genText, parse_mode="Markdown")
+
 
 @router.message(lambda message: message.text == "Генерация")
 async def request_text(msg: Message):
