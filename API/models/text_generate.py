@@ -23,4 +23,4 @@ async def music_text_generate(prompt:str)->str:
     return response
 
 
-##print( music_text_generate("Дождь, ожидание холод, боль, снова я  расколот"))
+#(music_text_generate("Дождь, ожидание холод, боль, снова я  расколот"))
