@@ -60,7 +60,7 @@ async def music_text_generate(prompt:str)->str:
         credentials=GIGACHAT_TOKEN,
         verify_ssl_certs=False, model="GigaChat")
     response = giga.chat(
-        f"{prompt} -> Это наброски для текста песни, дополни, чтобы получились полноценные слова песни. Должно  быть не менее 3х куплетов!")
+        f"{prompt} -> Это наброски для текста песни, дополни, чтобы получились полноценные слова песни. Должно  быть не менее 3х куплетов! Не выводи ничего лишнего, кроме самого текста песни и нумерации куплетов!")
     response = response.choices[0].message.content
     return  clean_text(response) #очищаем вывод
 
