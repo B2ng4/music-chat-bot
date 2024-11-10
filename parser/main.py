@@ -6,7 +6,7 @@ response = requests.get('https://rus.hitmotop.com/')
 soup = lxml_html.fromstring(response.content)
 
 save_directory = "./music"
-os.makedirs(save_directory, exist_ok=True)  # Create directory if it doesn't exist
+os.makedirs(save_directory, exist_ok=True)
 
 links = soup.xpath('//a[@class="track__download-btn"]')
 track_names = soup.xpath('//div[@class="track__title"]/text()')
