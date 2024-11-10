@@ -4,7 +4,7 @@ from aiogram.types import Message,FSInputFile
 from aiogram.filters import Command
 
 from keyboards.main import keyboard_main
-#from modules.generateVocal import generateVocal
+from apiRequests.generateVocal import generateVocal
 from models.ModelForm import Form
 from models.ModelText2ImageAPI import Text2ImageAPI
 
@@ -26,8 +26,8 @@ async def request_text(msg: Message, state: FSMContext):
 
 @router.message(Form.waiting_for_text)
 async def generate(msg: Message, state: FSMContext):
-    voice_file = await generateVocal(msg.text) # создай здесь отправку request запроса на  /api/v1/get_vocal
-    await msg.answer("⚙️⚙️⚙️*Погодите*...*Я сочиняю*...⚙️⚙️️⚙️",parse_mode="Markdown")
+    await msg.answer("⚙️⚙️⚙️*Погодите*...*Я сочиняю*...⚙️⚙️️⚙️", parse_mode="Markdown")
+    voice_file = generateVocal(msg.text) # создай здесь отправку request запроса на  /api/v1/get_vocal
     await msg.answer_voice(voice=FSInputFile(voice_file),caption="Сгенерированный вокал")
     await state.clear()
 
