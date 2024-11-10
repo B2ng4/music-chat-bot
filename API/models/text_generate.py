@@ -1,12 +1,58 @@
 
 import os
+import asyncio
 from gigachat import GigaChat
 from dotenv import load_dotenv
 
-
-
 load_dotenv()
 GIGACHAT_TOKEN = os.getenv("GIGACHAT_TOKEN")
+
+
+def clean_text(text: str) -> str:
+    """
+         Функция для очистки текста песни от лишних элементов
+        input:  text (str): Исходный текст песни
+        output:  str: Очищенный текст песни
+        """
+    start_index = text.find("Куплет 1")
+    # Получаем текст после "Куплет 1:"
+    # Добавляем 8 к индексу, чтобы пропустить само слово "Куплет 1:"
+    text = "Куплет 1:" + text[start_index:].strip()
+    # Список слов для удаления
+    words_to_remove = ['Конечно, вот примерный текст для трех куплетов:', 'Надеюсь, этот текст поможет вам завершить вашу песню!', '---']
+
+    # Разбиваем текст на строки
+    lines = text.split('\n')
+
+    # Очищаем строки
+    cleaned_lines = []
+    for line in lines:
+        # Убираем начальные и конечные пробелы
+        line = line.strip()
+
+        # Пропускаем пустые строки
+        if not line:
+            continue
+
+        # Пропускаем строки, содержащие слова из списка words_to_remove
+        skip_line = False
+        for word in words_to_remove:
+            if word in line:
+                skip_line = True
+                break
+        if skip_line:
+            continue
+
+        # Убираем звездочки
+        line = line.replace('*', '')
+
+        # Добавляем очищенную строку
+        cleaned_lines.append(line)
+
+    # Соединяем строки обратно с переносом строки
+    return '\n'.join(cleaned_lines)
+
+
 async def music_text_generate(prompt:str)->str:
     """
     Функция для написания текста песни с помощью  нейросети Gigachat
@@ -18,9 +64,18 @@ async def music_text_generate(prompt:str)->str:
         credentials=GIGACHAT_TOKEN,
         verify_ssl_certs=False, model="GigaChat")
     response = giga.chat(
-        f"{prompt} -> Это наброски для текста песни, дополни, чтобы получились полноценные слова песни. Должно  быть не менее 3х куплетов!")
+        f"{prompt} -> Это наброски для текста песни, дополни, чтобы получились полноценные слова песни. Должно  быть не менее 3х куплетов! Не выводи ничего лишнего! Должен быть только чистый текст в твоём ответе!")
     response = response.choices[0].message.content
-    return response
+    return  clean_text(response) #очищаем вывод
 
 
-#(music_text_generate("Дождь, ожидание холод, боль, снова я  расколот"))
+
+#////////////////////////////// ДЛЯ ТЕСТА ///////////////////////////////////////////////
+
+# async def main():
+#     result = await music_text_generate("Дождь, ожидание холод, боль, снова я расколот")
+#     print(result)
+#
+# # Запускаем асинхронную функцию
+# if __name__ == "__main__":
+#     asyncio.run(main())
