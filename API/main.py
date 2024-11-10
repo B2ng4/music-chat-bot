@@ -39,3 +39,6 @@ async def music_text(prompt:Prompt):
 @app.post("/api/v1/get_vocal")
 async def vocal(musictext:MusText):
     wav_vocal = vocal_get_wav(musictext)
+    return {"path_ti_vocal":wav_vocal}
+
+

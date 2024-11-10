@@ -1,4 +1,4 @@
-from click import prompt
+
 from pydantic import BaseModel
 
 
@@ -7,4 +7,4 @@ class Prompt(BaseModel):
 
 
 class MusText(BaseModel):
-    str
+    text:str
