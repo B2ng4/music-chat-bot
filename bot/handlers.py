@@ -17,6 +17,7 @@ router = Router()
 @router.message(Command("start"))
 async def start_handler(msg: Message):
     await msg.answer("Привет! Я помогу сгенерировать вокал!🎤🎧", reply_markup=keyboard_main)
+    await msg.answer("Данная модель находится в альфа-версии. Генерация вокала до 3-х минут.", reply_markup=keyboard_main)
 
 @router.message(lambda message: message.text == "У меня уже есть текст🎶")
 async def request_text(msg: Message, state: FSMContext):
