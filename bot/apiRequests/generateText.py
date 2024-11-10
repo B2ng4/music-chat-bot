@@ -12,3 +12,4 @@ def generateText(promt):
         return music_text
     else:
         return error
+
