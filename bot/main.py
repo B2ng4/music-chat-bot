@@ -1,15 +1,15 @@
 import asyncio
 import logging
+from handlers import router
+import os
+from dotenv import load_dotenv
 
 from aiogram import Bot, Dispatcher
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.client.default import DefaultBotProperties
 
-from handlers import router
 
-import os
-from dotenv import load_dotenv
 
 async def main():
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
