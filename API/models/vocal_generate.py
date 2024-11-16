@@ -16,7 +16,7 @@ async def vocal_get_wav(text:str) -> str:
         "--mode",
         "single",
         "--dataset",
-        "Ruspeech"
+        "LJspeech"
     ]
     try:
         # Используем subprocess.run для выполнения команды
